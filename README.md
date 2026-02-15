@@ -2,8 +2,8 @@
 
 This library is a wrapper for the [Spotify Web API](https://developer.spotify.com/documentation/web-api/) designed to work with the [ESP32](https://www.espressif.com/en/products/socs/esp32/overview) microcontroller.
 
-⚠️ **Version 3 Notice:** This release may not be backward compatible with v2.x.x
-The authetication process has changed to comply with the new spotify guidelines.
+⚠️ **Version 4 Notice:** This release may not be backward compatible with v3.x.x
+Some of the API endpoints were removed or renamed, to fully align with the new API provided by Spotify [Spotify API update Blog](https://developer.spotify.com/blog/2026-02-06-update-on-developer-access-and-platform-security).
 
 ## Dependencies
 
@@ -12,7 +12,7 @@ The authetication process has changed to comply with the new spotify guidelines.
 
 ## Setup
 
- **[YouTube Tutorial v3](https://youtu.be/Yy75KzIfqi4)**
+ **[YouTube authentication Tutorial for v3 & v4](https://youtu.be/Yy75KzIfqi4)**
 
 ### 1. Create a Spotify Application
 
@@ -107,21 +107,12 @@ See the [Spotify Web API Reference](https://developer.spotify.com/documentation/
 To reduce flash usage, disable unneeded endpoints by defining macros before including the library:
 
 ```c++
-#define DISABLE_PLAYER
-#define DISABLE_ALBUM
-#define DISABLE_ARTIST
-#define DISABLE_AUDIOBOOKS
-#define DISABLE_CATEGORIES
-#define DISABLE_CHAPTERS
-#define DISABLE_EPISODES
-#define DISABLE_GENRES
-#define DISABLE_MARKETS
-#define DISABLE_PLAYLISTS
-#define DISABLE_SEARCH
-#define DISABLE_SHOWS
-#define DISABLE_TRACKS
-#define DISABLE_USER
-#define DISABLE_SIMPLIFIED
+#define DISABLE_LIBRARY         //Saved items & followed artists
+#define DISABLE_PLAYLISTS       //Playlist management
+#define DISABLE_METADATA        //Albums, artists, search, shows, tracks
+#define DISABLE_PLAYER          //Playback control
+#define DISABLE_USER            //Profile & top items
+#define DISABLE_SIMPLIFIED      //Helper convenience functions
 ```
 
 ## Helper Functions
@@ -144,7 +135,6 @@ bool is_playing();
 bool volume_modifyable();
 
 // URI helpers
-char  convert_id_to_uri(char* id, char* type);
 char* convert_id_to_uri(char* id, char* type, char* uri);
 
 // Current album artwork url
