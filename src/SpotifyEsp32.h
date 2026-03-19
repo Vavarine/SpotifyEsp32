@@ -251,13 +251,14 @@ class Spotify {
 
     /// @brief Reorder or replace items in a playlist.
     /// @param playlist_id The Spotify ID of the playlist
-    /// @param uris Array of Spotify URIs (for replace) or em.pty for reorder only.
+    /// @param size The size of the URI array
+    /// @param uris Array of Spotify URIs (for replace) or empty for reorder only.
     /// @param range_start Start position of the range to move (for reorder).
     /// @param insert_before Position to insert the range before.
     /// @param range_length Length of the range to move (for reorder).
     /// @param snapshot_id The playlist snapshot ID (Optional).
     /// @return response object containing http status code and reply.
-    response update_playlist_items(const char* playlist_id, const char** uris = nullptr, int range_start = 0, int insert_before = 0, int range_length = 0, const char* snapshot_id = nullptr);
+    response update_playlist_items(const char* playlist_id, int size = 0, const char** uris = nullptr, int range_start = 0, int insert_before = 0, int range_length = 0, const char* snapshot_id = nullptr);
 
     /// @brief Get full details of the items of a playlist (new endpoint replacing old /tracks).
     /// @param playlist_id The Spotify ID of the playlist.
@@ -367,6 +368,7 @@ class Spotify {
   /// @param filter JsonDocument containing the fields to filter (Optional, returns all fields if not provided).
   /// @return response object containing http status code and reply.
   response get_users_top_items(const char* type, int limit = 10, int offset = 0, const char* time_range = nullptr, JsonDocument filter = JsonDocument());
+
   #endif
 
   #ifndef DISABLE_PLAYER

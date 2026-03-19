@@ -189,20 +189,9 @@ The library provides the following logging options to control output verbosity:
 
 The default logging level is `SPOTIFY_LOG_NONE`, meaning no logs are generated unless explicitly enabled.
 
-## Memory and Flash usage
-
-Because this library uses WiFi and HTTPS, it requires more flash memory than a typical ESP32 sketch.
-You may need to increase the application partition size (above the default 1.2 MB).
-
-- [Official Espressif Documentation](https://espressif-docs.readthedocs-hosted.com/projects/arduino-esp32/en/latest/tutorials/partition_table.html?highlight=partitions)
-- [Partition Table in the Arduino IDE](https://robotzero.one/arduino-ide-partitions/)
-- [Partition Table in Platform IO](https://docs.platformio.org/en/latest/platforms/espressif32.html)
-
-If flash space is limited, disable unused endpoints.
-
 ## Troubleshooting
 
-- Enable debug mode by passing `true` as second last argument to the constructor.
+- Enable debug mode by passing using the above mentioned functions.
 - If requests fail, inspect the returned response or Serial output.
 - Test individual endpoints in the [Spotify Web API Console](https://developer.spotify.com/console/). </br>
 - Still having issues? Open an issue in this repository.
@@ -211,4 +200,3 @@ If flash space is limited, disable unused endpoints.
 
 - ESP32 WROOM
 - Should also work on other ESP32 models.
-- For now it probably uses too much flash and memory to run on a standard ESP2866
