@@ -3,12 +3,12 @@
 This library is a wrapper for the [Spotify Web API](https://developer.spotify.com/documentation/web-api/) designed to work with the [ESP32](https://www.espressif.com/en/products/socs/esp32/overview) microcontroller.
 
 ⚠️ **Version 4 Notice:** This release may not be backward compatible with v3.x.x
-Some of the API endpoints were removed or renamed, to fully align with the new API provided by Spotify [Spotify API update Blog](https://developer.spotify.com/blog/2026-02-06-update-on-developer-access-and-platform-security).
+Some of the API endpoints were removed or renamed, to fully align with the new API provided by Spotify ([Spotify API update Blog](https://developer.spotify.com/blog/2026-02-06-update-on-developer-access-and-platform-security)).
 
 ## Dependencies
 
 - [ArduinoJson](https://arduinojson.org/)  
-- [WiFiClientSecure](https://github.com/espressif/arduino-esp32/tree/release/v2.x/libraries/WiFiClientSecureh) *(Note: In Arduino-ESP32 v3.x, `WiFiClientSecure` is a compatibility alias for `NetworkClientSecure`. This library uses `WiFiClientSecure` to ensure full compatibility with **PlatformIO**, where v3.x support is still unavailable.)*
+- [WiFiClientSecure](https://github.com/espressif/arduino-esp32/tree/release/v2.x/libraries/WiFiClientSecure) *(Note: In Arduino-ESP32 v3.x, `WiFiClientSecure` is a compatibility alias for `NetworkClientSecure`. This library uses `WiFiClientSecure` to ensure full compatibility with **PlatformIO**, where v3.x support is still unavailable.)*
 
 ## Setup
 
@@ -189,12 +189,46 @@ The library provides the following logging options to control output verbosity:
 
 The default logging level is `SPOTIFY_LOG_NONE`, meaning no logs are generated unless explicitly enabled.
 
+## Asynchronous Spotify API Calls
+
+The library supports running Spotify API calls asynchronously using FreeRTOS. This allows your main loop to continue without waiting for a request to finish.
+
+### Usage
+
+Define a callback to handle the response:
+
+```cpp
+void handle_callback(response resp) {
+    print_response(resp); // Handle your response e.g. print it.
+}
+```
+
+Wrap your API call in a lambda and pass it to `async()` along with the callback:
+
+```cpp
+// Example: call a function with arguments
+sp.async([&]() {
+    return sp.get_playlist_items(0, 50, filter_doc);
+}, handle_callback);
+
+// Example: call a function with no arguments
+sp.async([&]() {
+    return sp.get_users_saved_albums();
+}, handle_callback);
+```
+
+Notes:
+
+- Any arguments must be captured or bound inside the lambda.
+- The callback receives the response object once the async task completes.
+- Each async call runs on a separate FreeRTOS task, with a stack size of 8192 bytes by default.
+
 ## Troubleshooting
 
-- Enable debug mode by passing using the above mentioned functions.
+- Enable debug mode using the above mentioned function `set_log_level`.
 - If requests fail, inspect the returned response or Serial output.
 - Test individual endpoints in the [Spotify Web API Console](https://developer.spotify.com/console/). </br>
-- Still having issues? Open an issue in this repository.
+- Still having issues? Open an issue in this repository. Or contact me via email.
 
 ## Supported Devices
 

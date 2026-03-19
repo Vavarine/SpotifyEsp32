@@ -88,10 +88,13 @@ typedef struct{
   String error;
 } header_resp;
 
+typedef void (*AsyncCallback)(response);
+
 
 /// @brief Print response object
 /// @param response_obj Response object to print
 void print_response(response response_obj);
+
 class Spotify {
   public:
   /// @brief Creates a Spotify client without a refresh token.
@@ -536,8 +539,13 @@ class Spotify {
     /// @param spotify_log_level Logging level enum value.
     void set_log_level(spotify_log_level_t spotify_log_level);
 
+   /// @brief Execute a Spotify API call asynchronously.
+   /// @param fn A lambda function wrapping the Spotify member function to call. Any required arguments must be bound inside the lambda.
+   /// @param callback Function pointer called once the async function completes. Receives the `response` object.
+    void async(std::function<response()> fn, AsyncCallback callback);
+
     /// @brief Stops internal services and releases allocated resources.
-    ///        After calling this function, the object should not be used unless reinitialized.
+    /// After calling this function, the object should not be used anymore unless reinitialized.
     void end();
     
   private:

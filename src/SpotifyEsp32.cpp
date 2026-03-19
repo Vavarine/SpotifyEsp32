@@ -1143,3 +1143,21 @@ void Spotify::urlEncode(const char* src, char* dest, size_t destSize){
   }
   dest[j] = '\0';
 }
+
+void Spotify::async(std::function<response()> fn, AsyncCallback callback) {
+  struct TaskParam {
+    std::function<response()> fn;
+    AsyncCallback callback;
+  };
+  TaskParam* param = new TaskParam{fn, callback};
+
+  xTaskCreatePinnedToCore(
+      [](void* pv) {
+          TaskParam* p = (TaskParam*)pv;
+          response r = p->fn();
+          if (p->callback) p->callback(r);
+          delete p;
+          vTaskDelete(NULL);
+      },
+      "SpotifyAsync", 8192, param, 1, NULL, 1);
+}
